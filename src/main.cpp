@@ -56,6 +56,10 @@ int main()
     // Player Position
     sf::Vector2f lastPosition;
 
+    // Camera view
+    sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+    window.setView(view);
+
     while (window.isOpen())
     {
         sf::Time deltaTime = clock.restart();
@@ -65,6 +69,14 @@ int main()
             if (event.type == sf::Event::Closed)
             {
                 window.close();
+            }
+
+            // Move camera view with mouse movement
+            if (event.type == sf::Event::MouseMoved)
+            {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                view.setCenter(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                window.setView(view);
             }
         }
 
@@ -87,7 +99,7 @@ int main()
             sf::FloatRect rectangleBoundingBox = rectangle.getGlobalBounds();
             sf::FloatRect octagonBoundingBox = octagon.getGlobalBounds();
 
-            // Reset on Collision
+            // Player Movement Collision and Collision
             if (!circleBoundingBox.intersects(rectangleBoundingBox) && !circleBoundingBox.intersects(octagonBoundingBox))
             {
                 lastPosition = circle.getPosition();
