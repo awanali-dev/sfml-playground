@@ -70,15 +70,30 @@ int main()
             {
                 window.close();
             }
-
-            // Move camera view with mouse movement
-            if (event.type == sf::Event::MouseMoved)
-            {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                view.setCenter(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-                window.setView(view);
-            }
         }
+
+        // Move camera view based on mouse position relative to window edges
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        float moveSpeed = 300.0f * deltaTime.asSeconds(); // Adjust the speed as needed
+        sf::Vector2f viewCenter = view.getCenter();
+        if (mousePos.x < 10) // Left edge
+        {
+            viewCenter.x -= moveSpeed;
+        }
+        else if (mousePos.x > window.getSize().x - 10) // Right edge
+        {
+            viewCenter.x += moveSpeed;
+        }
+        if (mousePos.y < 10) // Top edge
+        {
+            viewCenter.y -= moveSpeed;
+        }
+        else if (mousePos.y > window.getSize().y - 10) // Bottom edge
+        {
+            viewCenter.y += moveSpeed;
+        }
+        view.setCenter(viewCenter);
+        window.setView(view);
 
         // Clear previous frame
         window.clear(sf::Color::White);
