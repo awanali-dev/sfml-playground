@@ -74,7 +74,7 @@ int main()
 
         // Move camera view based on mouse position relative to window edges
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        float moveSpeed = 300.0f * deltaTime.asSeconds(); // Adjust the speed as needed
+        float moveSpeed = 300.0f * deltaTime.asSeconds();
         sf::Vector2f viewCenter = view.getCenter();
         if (mousePos.x < 10) // Left edge
         {
