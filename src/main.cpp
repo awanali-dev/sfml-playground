@@ -53,6 +53,9 @@ int main()
     // Time
     sf::Clock clock;
 
+    // Player Position
+    sf::Vector2f lastPosition;
+
     while (window.isOpen())
     {
         sf::Time deltaTime = clock.restart();
@@ -76,7 +79,37 @@ int main()
         window.draw(text);
 
         if (window.hasFocus())
+        {
+            // Rotate Octagon
             octagon.rotate(500.f * deltaTime.asSeconds());
+
+            sf::FloatRect circleBoundingBox = circle.getGlobalBounds();
+            sf::FloatRect rectangleBoundingBox = rectangle.getGlobalBounds();
+            sf::FloatRect octagonBoundingBox = octagon.getGlobalBounds();
+
+            // Reset on Collision
+            if (!circleBoundingBox.intersects(rectangleBoundingBox) && !circleBoundingBox.intersects(octagonBoundingBox))
+            {
+                lastPosition = circle.getPosition();
+
+                // Player Movement
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                    circle.move(-400.f * deltaTime.asSeconds(), 0.f);
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                    circle.move(400.f * deltaTime.asSeconds(), 0.f);
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+                    circle.move(0.f, -400.f * deltaTime.asSeconds());
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                    circle.move(0.f, 400.f * deltaTime.asSeconds());
+            }
+            else
+            {
+                circle.setPosition(lastPosition);
+            }
+        }
 
         // End current frame
         window.display();
