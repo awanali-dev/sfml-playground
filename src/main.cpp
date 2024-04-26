@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 int main()
 {
@@ -49,8 +50,13 @@ int main()
     text.setCharacterSize(24);
     text.setFillColor(sf::Color::Magenta);
 
+    // Time
+    sf::Clock clock;
+
     while (window.isOpen())
     {
+        sf::Time deltaTime = clock.restart();
+
         for (auto event = sf::Event{}; window.pollEvent(event);)
         {
             if (event.type == sf::Event::Closed)
@@ -68,6 +74,9 @@ int main()
         window.draw(line, 2, sf::Lines);
         window.draw(octagon);
         window.draw(text);
+
+        if (window.hasFocus())
+            octagon.rotate(500.f * deltaTime.asSeconds());
 
         // End current frame
         window.display();
